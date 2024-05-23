@@ -9,7 +9,7 @@ import {
   Connection,
 } from "@solana/web3.js";
 import IDL from "./idl.json";
-import IDL_anchor from "./idl_2.json";
+import IDL_anchor from "./idl_hello_anchor.json";
 import IDL_pda from "./idl_pda.json";
 import { Program } from "@coral-xyz/anchor";
 import { AnchorWallet } from "@solana/wallet-adapter-react";
