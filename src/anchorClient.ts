@@ -2,22 +2,23 @@ import * as anchor from "@coral-xyz/anchor";
 import { BN } from "@coral-xyz/anchor";
 import {
   PublicKey,
-  Idl,
   SystemProgram,
   Transaction,
   ComputeBudgetProgram,
   Keypair,
+  Connection,
 } from "@solana/web3.js";
 import IDL from "./idl.json";
 import IDL_anchor from "./idl_2.json"; // IDLファイルをsrcディレクトリに配置
 import { Program } from "@coral-xyz/anchor";
+import { AnchorWallet } from "@solana/wallet-adapter-react";
 
 const programId = new PublicKey("467TS9z5e37HuPvkQBv4nNndyaK2GpnF2bZY2HsdpkcH");
 const programId_2 = new PublicKey(
   "9wp3vskuHapMPKnMKqthzChgWghh3iJKkcbu5dgG3go5"
 );
 
-function createProvider(wallet, connection) {
+function createProvider(wallet: AnchorWallet, connection: Connection) {
   const provider = new anchor.AnchorProvider(connection, wallet, {
     commitment: "confirmed",
   });
@@ -35,7 +36,10 @@ function createTransaction() {
   return transaction;
 }
 
-export async function callHelloProgram(wallet, connection) {
+export async function callHelloProgram(
+  wallet: AnchorWallet,
+  connection: Connection
+) {
   const provider = createProvider(wallet, connection);
   const program = new Program(IDL, programId, provider);
   const transaction = createTransaction();
@@ -47,7 +51,10 @@ export async function callHelloProgram(wallet, connection) {
   return await provider.sendAndConfirm(transaction);
 }
 
-export async function callHelloAnchorProgram(wallet, connection) {
+export async function callHelloAnchorProgram(
+  wallet: AnchorWallet,
+  connection: Connection
+) {
   const provider = createProvider(wallet, connection);
   const program = new Program(IDL_anchor, programId_2, provider);
   const transaction = createTransaction();

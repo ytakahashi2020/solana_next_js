@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 import {
   PublicKey,
@@ -7,6 +7,7 @@ import {
   Transaction,
   LAMPORTS_PER_SOL,
 } from "@solana/web3.js";
+import Popup from "../../Popup";
 
 const TransferPage: React.FC = () => {
   const { connection } = useConnection();
@@ -16,6 +17,12 @@ const TransferPage: React.FC = () => {
   const [amount, setAmount] = useState<string>("0");
   const [status, setStatus] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [showPopup, setShowPopup] = useState<boolean>(true);
+
+  useEffect(() => {
+    // ページ表示時にポップアップを表示
+    setShowPopup(true);
+  }, []);
 
   const handleTransfer = async () => {
     if (!connected) {
@@ -41,7 +48,7 @@ const TransferPage: React.FC = () => {
       );
 
       const signature = await sendTransaction(transaction, connection);
-      setStatus(`送付成功: ${signature}`);
+      setStatus(`https://solscan.io/tx/${signature}?cluster=devnet`);
     } catch (error: any) {
       setStatus(`送付失敗: ${error.message}`);
     } finally {
@@ -51,6 +58,7 @@ const TransferPage: React.FC = () => {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
+      {showPopup && <Popup onClose={() => setShowPopup(false)} />}
       <div className="w-full max-w-md bg-white p-8 rounded-lg shadow-md">
         <h1 className="text-2xl font-semibold mb-6 text-center">SOLを送付</h1>
         <label className="block mb-4">
@@ -104,9 +112,15 @@ const TransferPage: React.FC = () => {
       </div>
       {status && (
         <div className="mt-4 p-2 bg-gray-200 rounded-md shadow-inner max-w-md w-full overflow-auto">
-          <p className="text-center text-sm text-gray-600 break-all">
+          <p className="text-left">実行結果</p>
+          <a
+            href={status}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-blue-600"
+          >
             {status}
-          </p>
+          </a>
         </div>
       )}
     </div>

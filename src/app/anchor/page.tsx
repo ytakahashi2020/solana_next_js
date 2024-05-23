@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 import { callHelloProgram, callHelloAnchorProgram } from "../../anchorClient";
 
@@ -9,6 +9,7 @@ import {
   useWallet,
   useAnchorWallet,
 } from "@solana/wallet-adapter-react";
+import Popup from "../../Popup";
 
 const AnchorPage: React.FC = () => {
   const { publicKey, connected } = useWallet();
@@ -18,6 +19,12 @@ const AnchorPage: React.FC = () => {
   const [status2, setStatus2] = useState<string>("");
   const [resultUrl, setResultUrl] = useState<string>("");
   const [resultUrl2, setResultUrl2] = useState<string>("");
+  const [showPopup, setShowPopup] = useState<boolean>(true);
+
+  useEffect(() => {
+    // ページ表示時にポップアップを表示
+    setShowPopup(true);
+  }, []);
 
   const handleHelloClick = async () => {
     if (!connected) {
@@ -54,6 +61,7 @@ const AnchorPage: React.FC = () => {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4 space-y-4">
+      {showPopup && <Popup onClose={() => setShowPopup(false)} />}
       <div className="w-full max-w-md bg-white p-8 rounded-lg shadow-md">
         <h1 className="text-2xl font-semibold mb-6 text-center">
           Anchorプログラム実行
