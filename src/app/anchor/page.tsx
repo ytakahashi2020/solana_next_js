@@ -2,8 +2,8 @@
 
 import React, { useState } from "react";
 import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
-import { callHelloProgram } from "../../anchorClient";
-import { callHelloProgram2 } from "../../anchorClient2";
+import { callHelloProgram, callHelloAnchorProgram } from "../../anchorClient";
+
 import {
   useConnection,
   useWallet,
@@ -42,7 +42,7 @@ const AnchorPage: React.FC = () => {
     setStatus("プログラム実行中...");
 
     try {
-      const result = await callHelloProgram2(wallet, connection);
+      const result = await callHelloAnchorProgram(wallet, connection);
       setStatus("プログラムが正常に実行されました");
       setResultUrl(`https://solscan.io/tx/${result}?cluster=devnet`);
     } catch (err: any) {
