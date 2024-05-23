@@ -35,7 +35,5 @@ export async function callHelloProgram(wallet, connection) {
   );
 
   // トランザクションの送信
-  const result = await provider.sendAndConfirm(transaction);
-
-  console.log("result", result);
+  return await provider.sendAndConfirm(transaction);
 }

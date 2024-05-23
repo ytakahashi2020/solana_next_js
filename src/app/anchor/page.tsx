@@ -14,6 +14,7 @@ const AnchorPage: React.FC = () => {
   const wallet = useAnchorWallet();
   const { connection } = useConnection();
   const [status, setStatus] = useState<string>("");
+  const [resultUrl, setResultUrl] = useState<string>("");
 
   const handleHelloClick = async () => {
     if (!connected) {
@@ -24,8 +25,9 @@ const AnchorPage: React.FC = () => {
     setStatus("プログラム実行中...");
 
     try {
-      await callHelloProgram(wallet, connection);
+      const result = await callHelloProgram(wallet, connection);
       setStatus("プログラムが正常に実行されました");
+      setResultUrl(`https://solscan.io/tx/${result}?cluster=devnet`);
     } catch (err: any) {
       setStatus(`プログラムの実行に失敗しました: ${err.message}`);
     }
@@ -37,7 +39,7 @@ const AnchorPage: React.FC = () => {
         <h1 className="text-2xl font-semibold mb-6 text-center">
           Anchorプログラム実行
         </h1>
-        <WalletMultiButton className="mb-4" />
+        {/* <WalletMultiButton className="mb-4" /> */}
         <button
           onClick={handleHelloClick}
           disabled={!connected}
@@ -50,6 +52,21 @@ const AnchorPage: React.FC = () => {
         <div className="mt-4 p-2 bg-gray-200 rounded-md shadow-inner max-w-md w-full overflow-auto">
           <p className="text-center text-sm text-gray-600 break-all">
             {status}
+          </p>
+        </div>
+      )}
+      {resultUrl && (
+        <div className="mt-4 p-2  max-w-md w-full overflow-auto">
+          <p className="text-center text-sm text-gray-600 break-all">
+            <p className="text-left">実行結果</p>
+            <a
+              href={resultUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-600"
+            >
+              {resultUrl}
+            </a>
           </p>
         </div>
       )}

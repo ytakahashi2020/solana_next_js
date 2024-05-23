@@ -49,13 +49,13 @@ const WalletPage: React.FC = () => {
     <main className="flex min-h-screen flex-col items-center justify-evenly p-24 bg-gray-100">
       {publicKey ? (
         <div className="flex flex-col gap-4 items-center bg-white p-8 rounded-lg shadow-md">
-          <h1 className="text-2xl font-semibold">あなたの公開鍵は:</h1>
+          <h1 className="text-2xl font-semibold">あなたの公開鍵</h1>
           <div className="bg-gray-100 p-4 rounded-md shadow-inner max-w-full overflow-auto">
             <p className="text-sm font-mono break-all">
               {publicKey.toString()}
             </p>
           </div>
-          <h2 className="text-xl font-medium">残高は: {balance} SOL</h2>
+          <h2 className="text-xl font-medium">残高 {balance} SOL</h2>
           <button
             onClick={getAirdropOnClick}
             type="button"
