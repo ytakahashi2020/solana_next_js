@@ -127,3 +127,29 @@ export async function callPDAFetchCounter(
   console.log("Your counter address", counterPubkey.toString());
   return await program.account.counter.fetch(counterPubkey);
 }
+
+export async function callPDAUpdateCounter(
+  wallet: AnchorWallet,
+  connection: Connection
+) {
+  const provider = createProvider(wallet, connection);
+  const program = new Program(IDL_pda, programId_pda, provider);
+  const transaction = createTransaction();
+
+  const [counterPubkey, _] = await anchor.web3.PublicKey.findProgramAddressSync(
+    [wallet.publicKey.toBytes()],
+    program.programId
+  );
+
+  transaction.add(
+    await program.methods
+      .updateCounter()
+      .accounts({
+        counter: counterPubkey,
+      })
+      .instruction()
+  );
+  console.log("transaction");
+
+  return await provider.sendAndConfirm(transaction);
+}
