@@ -34,6 +34,9 @@ export default function RootLayout({
               >
                 Anchor
               </Link>
+              <Link href="/pda" className="text-blue-500 hover:text-blue-700">
+                PDA
+              </Link>
             </nav>
           </header>
           {children}

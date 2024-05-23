@@ -9,13 +9,17 @@ import {
   Connection,
 } from "@solana/web3.js";
 import IDL from "./idl.json";
-import IDL_anchor from "./idl_2.json"; // IDLファイルをsrcディレクトリに配置
+import IDL_anchor from "./idl_2.json";
+import IDL_pda from "./idl_pda.json";
 import { Program } from "@coral-xyz/anchor";
 import { AnchorWallet } from "@solana/wallet-adapter-react";
 
 const programId = new PublicKey("467TS9z5e37HuPvkQBv4nNndyaK2GpnF2bZY2HsdpkcH");
 const programId_2 = new PublicKey(
   "Bk2X3u9bbdEBG5WpH4ENH8dyidcRaoxij1xT2xrdYx2K"
+);
+const programId_pda = new PublicKey(
+  "DdvaKpcPQiBaKSJ9dkHbrtfrtZQ6LrtCX2qgqKufMchG"
 );
 
 function createProvider(wallet: AnchorWallet, connection: Connection) {
@@ -77,4 +81,49 @@ export async function callHelloAnchorProgram(
   console.log("transaction");
 
   return await provider.sendAndConfirm(transaction, [newAccountKp]);
+}
+
+export async function callPDAProgram(
+  wallet: AnchorWallet,
+  connection: Connection
+) {
+  const provider = createProvider(wallet, connection);
+  const program = new Program(IDL_pda, programId_pda, provider);
+  const transaction = createTransaction();
+
+  const [counter, _counterBump] =
+    await anchor.web3.PublicKey.findProgramAddressSync(
+      [wallet.publicKey.toBytes()],
+      program.programId
+    );
+  console.log("Your counter address", counter.toString());
+
+  transaction.add(
+    await program.methods
+      .createCounter()
+      .accounts({
+        authority: wallet.publicKey,
+        counter: counter,
+        systemProgram: SystemProgram.programId,
+      })
+      .instruction()
+  );
+  console.log("transaction");
+
+  return await provider.sendAndConfirm(transaction);
+}
+
+export async function callPDAFetchCounter(
+  wallet: AnchorWallet,
+  connection: Connection
+) {
+  const provider = createProvider(wallet, connection);
+  const program = new Program(IDL_pda, programId_pda, provider);
+  const transaction = createTransaction();
+  const [counterPubkey, _] = await anchor.web3.PublicKey.findProgramAddressSync(
+    [wallet.publicKey.toBytes()],
+    program.programId
+  );
+  console.log("Your counter address", counterPubkey.toString());
+  return await program.account.counter.fetch(counterPubkey);
 }
