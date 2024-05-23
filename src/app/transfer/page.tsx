@@ -7,7 +7,6 @@ import {
   Transaction,
   LAMPORTS_PER_SOL,
 } from "@solana/web3.js";
-import Popup from "../../Popup";
 
 const TransferPage: React.FC = () => {
   const { connection } = useConnection();
@@ -58,11 +57,6 @@ const TransferPage: React.FC = () => {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
-      {showPopup && (
-        <div className="fixed inset-0 flex items-center justify-center z-50">
-          <Popup onClose={() => setShowPopup(false)} />
-        </div>
-      )}
       <div className="w-full max-w-md bg-white p-8 rounded-lg shadow-md">
         <h1 className="text-2xl font-semibold mb-6 text-center">SOLを送付</h1>
         <label className="block mb-4">
