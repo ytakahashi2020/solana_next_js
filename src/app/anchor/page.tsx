@@ -3,10 +3,28 @@
 import React, { useState } from "react";
 import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 import { callHelloProgram } from "../../anchorClient";
-import { useConnection, useWallet } from "@solana/wallet-adapter-react";
+import {
+  useConnection,
+  useWallet,
+  useAnchorWallet,
+} from "@solana/wallet-adapter-react";
+import * as anchor from "@coral-xyz/anchor";
+import { Program, BN } from "@coral-xyz/anchor";
+import {
+  PublicKey,
+  Idl,
+  SystemProgram,
+  Transaction,
+  ComputeBudgetProgram,
+} from "@solana/web3.js";
+
+import IDL from "../../idl.json"; // IDLファイルをsrcディレクトリに配置
+const programId = new PublicKey("467TS9z5e37HuPvkQBv4nNndyaK2GpnF2bZY2HsdpkcH");
 
 const AnchorPage: React.FC = () => {
-  const { publicKey, connected, wallet } = useWallet();
+  const { publicKey, connected } = useWallet();
+  const wallet = useAnchorWallet();
+  const { connection } = useConnection();
   const [status, setStatus] = useState<string>("");
 
   const handleHelloClick = async () => {
@@ -17,12 +35,48 @@ const AnchorPage: React.FC = () => {
 
     setStatus("プログラム実行中...");
     try {
-      console.log("ffg");
       console.log(publicKey?.toBase58());
       console.log(wallet);
-      console.log("ffggrgr");
-      await callHelloProgram(publicKey); // wallet オブジェクトを渡すように変更
-      setStatus("Hello, World! プログラムが正常に実行されました");
+      // await callHelloProgram(publicKey, connection); // wallet オブジェクトを渡すように変更
+      const provider = new anchor.AnchorProvider(connection, wallet, {
+        commitment: "confirmed",
+      });
+
+      console.log("provider", provider);
+      anchor.setProvider(provider);
+      console.log("programId", programId);
+      console.log("connection", connection);
+
+      const program = new Program(IDL, programId, provider);
+
+      // const result = await program.methods
+      //   .initialize()
+      //   .accounts({})
+      //   .signers([])
+      //   .rpc();
+      // console.log("result", result);
+
+      // トランザクションの作成
+      const transaction = new Transaction();
+
+      // 計算バジェットインストラクションの追加
+      transaction.add(
+        ComputeBudgetProgram.setComputeUnitLimit({
+          units: 200000, // 必要なユニット数（必要に応じて調整）
+        })
+      );
+
+      // 他のインストラクションをトランザクションに追加
+      transaction.add(
+        await program.methods.initialize().accounts({}).instruction()
+      );
+
+      // トランザクションの送信
+      const result = await provider.sendAndConfirm(transaction);
+
+      console.log("result", result);
+
+      setStatus("プログラムが正常に実行されました");
     } catch (err: any) {
       setStatus(`プログラムの実行に失敗しました: ${err.message}`);
     }

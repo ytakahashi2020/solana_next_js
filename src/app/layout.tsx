@@ -28,6 +28,12 @@ export default function RootLayout({
               >
                 Transfer
               </Link>
+              <Link
+                href="/anchor"
+                className="text-blue-500 hover:text-blue-700"
+              >
+                Anchor
+              </Link>
             </nav>
           </header>
           {children}

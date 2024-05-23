@@ -40,7 +40,7 @@ const WalletPage: React.FC = () => {
       (async function getBalanceEvery10Seconds() {
         const newBalance = await connection.getBalance(publicKey);
         setBalance(newBalance / LAMPORTS_PER_SOL);
-        setTimeout(getBalanceEvery10Seconds, 10000);
+        setTimeout(getBalanceEvery10Seconds, 100000);
       })();
     }
   }, [publicKey, connection, balance]);

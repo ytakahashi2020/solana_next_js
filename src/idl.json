@@ -1,5 +1,18 @@
 {
+  "address": "467TS9z5e37HuPvkQBv4nNndyaK2GpnF2bZY2HsdpkcH",
   "version": "0.1.0",
-  "name": "hello_world",
-  "instructions": [{ "name": "hello", "accounts": [], "args": [] }]
+  "name": "test",
+  "instructions": [
+    {
+      "name": "initialize",
+      "accounts": [],
+      "args": []
+    }
+  ],
+  "metadata": {
+    "name": "test_metadata",
+    "version": "0.1.0",
+    "specs": [],
+    "spec": ""
+  }
 }

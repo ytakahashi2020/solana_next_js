@@ -1,24 +1,25 @@
 import * as anchor from "@coral-xyz/anchor";
-import { PublicKey, Idl } from "@solana/web3.js";
+import { PublicKey, Idl, SystemProgram } from "@solana/web3.js";
 import IDL from "./idl.json"; // IDLファイルをsrcディレクトリに配置
 import { Program } from "@coral-xyz/anchor";
+import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 
-const programId = new PublicKey("4rDGHPvN8HhcgujoGr86NtU2ErAoyaFYNHXZ1pkbm1Sp");
+const programId = new PublicKey("467TS9z5e37HuPvkQBv4nNndyaK2GpnF2bZY2HsdpkcH");
 
-export async function getProvider(wallet) {
-  console.log("Starting getProvider");
-  console.log("Wallet provided to getProvider:", wallet);
+export async function getProvider(wallet, connection) {
+  // console.log("Starting getProvider");
+  // console.log("Wallet provided to getProvider:", wallet);
 
-  const connection = new anchor.web3.Connection(
-    anchor.web3.clusterApiUrl("devnet")
-  );
-  console.log("Connection established");
+  // // const connection = new anchor.web3.Connection(
+  // //   anchor.web3.clusterApiUrl("devnet")
+  // // );
+  // console.log("Connection established");
 
-  const opts = {
-    preflightCommitment: "processed",
-  };
+  // const opts = {
+  //   commitment: "confirmed",
+  // };
 
-  const provider = new anchor.AnchorProvider(connection, wallet, {});
+  const provider = new anchor.AnchorProvider(connection, wallet, opts);
   console.log("Provider created", provider);
 
   // Check the wallet's publicKey from the provider
@@ -27,20 +28,13 @@ export async function getProvider(wallet) {
   return provider;
 }
 
-export async function callHelloProgram(wallet) {
-  console.log("Starting callHelloProgram");
-  console.log("Wallet provided:", wallet);
-  const connection = new anchor.web3.Connection(
-    anchor.web3.clusterApiUrl("devnet")
-  );
+export async function callHelloProgram(program) {
+  // const provider = new anchor.AnchorProvider(connection, wallet, {
+  //   commitment: "confirmed",
+  // });
 
-  const provider = await getProvider(wallet);
-  anchor.setProvider(provider);
-  console.log("Provider obtained:", provider);
-  console.log("Program ID:", programId);
+  // const program = new Program(IDL, programId, provider);
 
-  const program = new Program(IDL, programId, { connection });
-  console.log("Program created");
   try {
     await program.methods.hello().rpc();
     console.log("Hello, World!");
