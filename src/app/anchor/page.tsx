@@ -2,7 +2,6 @@
 
 import React, { useState } from "react";
 import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
-import { callHelloProgram } from "../../anchorClient";
 import {
   useConnection,
   useWallet,
@@ -12,13 +11,13 @@ import * as anchor from "@coral-xyz/anchor";
 import { Program, BN } from "@coral-xyz/anchor";
 import {
   PublicKey,
-  Idl,
   SystemProgram,
   Transaction,
   ComputeBudgetProgram,
 } from "@solana/web3.js";
 
 import IDL from "../../idl.json"; // IDLファイルをsrcディレクトリに配置
+
 const programId = new PublicKey("467TS9z5e37HuPvkQBv4nNndyaK2GpnF2bZY2HsdpkcH");
 
 const AnchorPage: React.FC = () => {
@@ -35,26 +34,12 @@ const AnchorPage: React.FC = () => {
 
     setStatus("プログラム実行中...");
     try {
-      console.log(publicKey?.toBase58());
-      console.log(wallet);
-      // await callHelloProgram(publicKey, connection); // wallet オブジェクトを渡すように変更
       const provider = new anchor.AnchorProvider(connection, wallet, {
         commitment: "confirmed",
       });
-
-      console.log("provider", provider);
       anchor.setProvider(provider);
-      console.log("programId", programId);
-      console.log("connection", connection);
 
       const program = new Program(IDL, programId, provider);
-
-      // const result = await program.methods
-      //   .initialize()
-      //   .accounts({})
-      //   .signers([])
-      //   .rpc();
-      // console.log("result", result);
 
       // トランザクションの作成
       const transaction = new Transaction();
