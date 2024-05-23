@@ -15,7 +15,7 @@ import { AnchorWallet } from "@solana/wallet-adapter-react";
 
 const programId = new PublicKey("467TS9z5e37HuPvkQBv4nNndyaK2GpnF2bZY2HsdpkcH");
 const programId_2 = new PublicKey(
-  "9wp3vskuHapMPKnMKqthzChgWghh3iJKkcbu5dgG3go5"
+  "Bk2X3u9bbdEBG5WpH4ENH8dyidcRaoxij1xT2xrdYx2K"
 );
 
 function createProvider(wallet: AnchorWallet, connection: Connection) {

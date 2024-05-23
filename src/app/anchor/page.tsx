@@ -61,7 +61,11 @@ const AnchorPage: React.FC = () => {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4 space-y-4">
-      {showPopup && <Popup onClose={() => setShowPopup(false)} />}
+      {showPopup && (
+        <div className="fixed inset-0 flex items-center justify-center z-50">
+          <Popup onClose={() => setShowPopup(false)} />
+        </div>
+      )}
       <div className="w-full max-w-md bg-white p-8 rounded-lg shadow-md">
         <h1 className="text-2xl font-semibold mb-6 text-center">
           Anchorプログラム実行
