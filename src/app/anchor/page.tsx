@@ -57,7 +57,7 @@ const AnchorPage: React.FC = () => {
       )}
       {resultUrl && (
         <div className="mt-4 p-2  max-w-md w-full overflow-auto">
-          <p className="text-center text-sm text-gray-600 break-all">
+          <p className="text-left text-sm text-gray-600 break-all">
             <p className="text-left">実行結果</p>
             <a
               href={resultUrl}
